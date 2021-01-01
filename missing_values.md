@@ -4,6 +4,7 @@
 
 ## Drop Columns with Missing Values 
 - Cons: may loose a lot of important info
+- When to use: when there are relatively few missing entries
 
 ## Imputation
 - What: fill in missing values with some numbers, e.g. mean values of each column
