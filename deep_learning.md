@@ -73,7 +73,7 @@ history_df = pd.DataFrame(history.history)
 history_df['loss'].plot()
 ```
 
-
+Smaller batch size may give noisier weight updates and loss curves. 
 
 
 
