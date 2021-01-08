@@ -57,6 +57,41 @@ Benefits of Pipelines:
 
   
 
+## Example: make_column_transformer()
+
+```python
+spotify = pd.read_csv('../input/dl-course-data/spotify.csv')
+
+X = spotify.copy().dropna() # drops any rows with missing values 
+y = X.pop('track_popularity')
+artists = X['track_artist']
+
+features_num = ['danceability', 'energy', 'key', 'loudness', 'mode',
+                'speechiness', 'acousticness', 'instrumentalness',
+                'liveness', 'valence', 'tempo', 'duration_ms']
+features_cat = ['playlist_genre']
+
+preprocessor = make_column_transformer(
+    (StandardScaler(), features_num), # use standardscaler for numerical features 
+    (OneHotEncoder(), features_cat), # use onehot encoder for categorical features 
+)
+
+# We'll do a "grouped" split to keep all of an artist's songs in one
+# split or the other. This is to help prevent signal leakage.
+def group_split(X, y, group, train_size=0.75):
+    splitter = GroupShuffleSplit(train_size=train_size)
+    train, test = next(splitter.split(X, y, groups=group))
+    return (X.iloc[train], X.iloc[test], y.iloc[train], y.iloc[test])
+
+X_train, X_valid, y_train, y_valid = group_split(X, y, artists)
+
+X_train = preprocessor.fit_transform(X_train)
+X_valid = preprocessor.transform(X_valid)
+y_train = y_train / 100 # popularity is on a scale 0-100, so this rescales to 0-1.
+y_valid = y_valid / 100
+```
+
+* `GroupShuffleSplit()` GroupShuffleSplit first groups the sample set to be divided, and then divides the training set and test set according to the grouping. Train_size is the proportion of samples to be training set, .e.g. 0.8; 
 
 # Resource and Ref
 
