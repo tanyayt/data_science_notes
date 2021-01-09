@@ -93,6 +93,15 @@ y_valid = y_valid / 100
 
 * `GroupShuffleSplit()` GroupShuffleSplit first groups the sample set to be divided, and then divides the training set and test set according to the grouping. Train_size is the proportion of samples to be training set, .e.g. 0.8; 
 
+With binary y, we can use `stratify` to ensure classes are evenly represented across splits
+
+```python
+X_train, X_valid, y_train, y_valid = \
+    train_test_split(X, y, stratify = y, train_size = 0.75)
+```
+
+
+
 # Resource and Ref
 
 [Pipeline on Kaggle](https://www.kaggle.com/alexisbcook/pipelines) 
